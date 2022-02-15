@@ -41,3 +41,5 @@ yarn-debug.log*
 
 /.idea
 /.idea/*
+
+config/database.yml
