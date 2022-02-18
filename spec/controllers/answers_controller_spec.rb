@@ -1,59 +1,71 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
+  sign_in_user
+  let(:question) { create(:question, { user: @user }) }
 
   describe 'GET #show' do
-    let(:answer) { create(:answer, question: question) }
+    let(:answer) { create(:answer, { question: question, user: @user }) }
+    before { get :show, params: { id: answer, question_id: question.id, user_id: @user.id } }
 
-    before { get :show, params: { question_id: question, id: answer } }
-
-    it 'assigns the requested question to @question' do
+    it 'assigns requested answer to @answer' do
       expect(assigns(:answer)).to eq answer
     end
 
-    it 'render show view' do
+    it 'renders show view' do
       expect(response).to render_template :show
     end
   end
 
   describe 'GET #new' do
-    before { get :new, params: { question_id: question } }
+    before { get :new, params: { question_id: question.id, user_id: @user.id } }
 
-    it 'assigns new Question to question' do
+    it 'assigns a new Answer to @answer' do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
-    it 'render new view' do
+    it 'renders new view' do
       expect(response).to render_template :new
     end
   end
 
   describe 'POST #create' do
     context 'with valid attributes' do
-      let(:create_request) { post :create, params: { question_id: question, answer: attributes_for(:answer) } }
-
-      it 'saves the new question in the database' do
-        expect{ create_request }.to change(question.answers, :count).by(1)
+      it 'saves the new answer in the database' do
+        expect { post :create, params: { answer: { body: 'MyText' }, question_id: question.id, user_id: @user.id } }
+          .to change(Answer, :count).by(1)
       end
 
-      it 'redirects to show view' do
-        create_request
-        expect(response).to redirect_to question_path(assigns(:question))
+      it 'renders show view' do
+        post :create, params: { answer: { body: 'MyText' }, question_id: question.id, user_id: @user.id }
+        expect(response).to redirect_to question_path(question.id)
       end
     end
 
     context 'with invalid attributes' do
-      let(:create_request) { post :create, params: { question_id: question, answer: attributes_for(:invalid_answer) } }
-
-      it 'doesnt save answer in db' do
-        expect { create_request }.to_not change(Answer, :count)
+      it 'does not save the answer' do
+        expect { post :create, params: { answer: { body: nil }, question_id: question.id, user_id: @user.id } }.to_not change(Answer, :count)
       end
 
-      it 'should redirect to new view' do
-        create_request
-        expect(response).to render_template :new
+      it 're-renders new view' do
+        post :create, params: { answer: { body: nil }, question_id: question.id, user_id: @user.id }
+        expect(response).to redirect_to new_question_answer_path(question.id)
       end
+    end
+  end
+
+
+  describe 'DELETE #destroy' do
+    let(:answer) { create(:answer, { question: question, user: @user }) }
+    before { answer }
+
+    it 'deletes answer' do
+      expect { delete :destroy, params: { id: answer, question_id: question.id, user_id: @user.id } }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirect to index view' do
+      delete :destroy, params: { id: answer, question_id: question.id, user_id: @user.id }
+      expect(response).to redirect_to question
     end
   end
 end

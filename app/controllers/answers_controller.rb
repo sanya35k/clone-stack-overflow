@@ -1,8 +1,16 @@
+require 'pry'
+
 class AnswersController < ApplicationController
-  before_action :find_question
+  before_action :authenticate_user!, except: [:show]
+
+  before_action :find_question, only: [:create, :new, :destroy]
+  before_action :find_answer, only: [:show, :destroy]
+
 
   def show
-    @answer = @question.answers.find(params[:id])
+  end
+
+  def edit
   end
 
   def new
@@ -11,10 +19,25 @@ class AnswersController < ApplicationController
 
   def create
     @answer = @question.answers.build(answer_params)
+    @answer.user = current_user
     if @answer.save
-      redirect_to question_path(@question)
+      redirect_to @question, note: 'Answer successfully send!'
     else
-      render :new
+      redirect_to new_question_answer_path(@question)
+    end
+  end
+
+
+  def destroy
+    @answer.destroy
+    redirect_to @question
+  end
+
+  def update
+    if @answer.update(answer_params)
+      redirect_to question_answer_path
+    else
+      render :edit
     end
   end
 
@@ -24,7 +47,11 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
   end
 
+  def find_answer
+    @answer = Answer.find(params[:id])
+  end
+
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, :question_id)
   end
 end
