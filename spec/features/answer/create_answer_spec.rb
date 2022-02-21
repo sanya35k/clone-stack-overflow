@@ -11,19 +11,16 @@ feature 'Create answer', '
 
   scenario 'Authenticated user give answer for question' do
     sign_in(user)
-    visit question_path(question)
-    create_answer
 
-    expect(page).to have_content 'Body body'
+    visit question_path(question)
+
+    expect(page).to have_content 'All questions'
+    expect(page).to have_content 'TitleQuestion'
+    expect(page).to have_content 'BodyQuestion'
   end
 
   scenario 'Non-authenticated user give answer for question' do
-    create :question, { user: user }
-    visit '/questions'
-    click_on 'Show'
-    click_on 'Send'
-
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    visit question_path(question)
+    expect(page).to_not have_content 'Send'
   end
-
 end

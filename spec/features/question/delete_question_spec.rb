@@ -7,19 +7,17 @@ feature 'Delete question', '
 ' do
 
   given(:user) { create(:user) }
+  given!(:question) { create(:question, { user: user }) }
 
   scenario 'Authenticated user and question creator delete his question', js: true do
     sign_in(user)
-    create_question
     visit '/questions'
     click_on 'Delete'
-    page.driver.browser.switch_to.alert.accept
+
     expect(page).to_not have_content 'Test question'
-    expect(current_path).to eq '/questions'
   end
 
-  scenario 'Non-authenticated user and question creator trying to delete question' do
-    create :question, { user: user }
+  scenario 'Non-authenticated user trying to delete question' do
     visit '/questions'
 
     expect(page).to_not have_content 'Delete'

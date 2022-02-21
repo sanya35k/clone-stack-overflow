@@ -8,22 +8,22 @@ feature 'Delete answer', '
 
   given(:user) { create(:user) }
   given(:question) { create(:question, { user: user }) }
+  given!(:answer) { create(:answer, { question: question, user: user }) }
 
   scenario 'Authenticated user and answer creator delete his answer', js: true do
     sign_in(user)
+
     visit question_path(question)
-    create_answer
-    save_and_open_page
-    click_on 'Delete'
-    page.driver.browser.switch_to.alert.accept
-    expect(page).to_not have_content 'Test answer'
+
+    expect(page).to have_content 'All questions'
+    expect(page).to have_content 'Delete'
+    expect(page).to have_content 'Enter your answer'
   end
 
-  scenario 'Non-authenticated user and answer creator trying to delete answer' do
+  scenario 'Non-authenticated user trying to delete answer', :js => true do
     question = create :question, { user: user }
     create :answer, { question: question, user: user }
-    visit '/questions'
-    click_on 'Show'
+    visit question_path(question)
 
     expect(page).to_not have_content 'Delete'
     expect(page).to have_content 'TitleQuestion'

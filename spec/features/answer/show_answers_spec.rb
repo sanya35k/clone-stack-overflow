@@ -6,21 +6,24 @@ feature 'Show answers list', '
   I want be able to see answers list
 ' do
 
-  scenario 'Non-authenticated user see answers list' do
-    user = create(:user)
-    question = create(:question, { user: user })
-    answer = create(:answer, { question: question, user: user })
-    visit '/questions'
+  given(:user) { create(:user) }
+  given(:question) { create(:question, { user: user }) }
+  given!(:answer) { create(:answer, { question: question, user: user }) }
 
+  scenario 'Non-authenticated user see answers list' do
+    visit '/questions'
+    expect(page).to have_content 'Ask question'
     click_on 'Show'
-    expect(page).to have_content 'TitleQuestion'
+    expect(page).to_not have_content 'Delete'
+    expect(page).to have_content 'BodyQuestion'
     expect(page).to have_content 'All questions'
   end
 
   scenario 'Non-authenticated user open page of empty answers list' do
+    DatabaseCleaner.clean
+
     visit '/questions'
 
-    expect(page).to_not have_content 'TitleQuestion'
     expect(page).to have_content 'Ask question'
   end
 end
