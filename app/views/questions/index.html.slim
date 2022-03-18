@@ -1,0 +1,11 @@
+div.container-fluid
+  table.table.table-bordered
+    thead.table-dark
+      tr
+        th Subject
+        th Question
+        th Author
+        th Answers
+        th Other parameters
+    = render @questions
+  p = link_to 'Ask a question', new_question_path
