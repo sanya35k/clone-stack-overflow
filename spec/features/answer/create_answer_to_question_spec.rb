@@ -36,4 +36,21 @@ feature 'Create answer', '
     expect(current_path).to eq question_path(question)
     expect(page).to have_content "Body can't be blank!"
   end
+
+  scenario 'Authenticated user give answer for question with an attachment', js: true do
+    sign_in(user)
+
+    visit question_path(question)
+    within '.container .new_answer_wrapper' do
+      fill_in 'answer[body]', with: 'My answer'
+      click_on 'Add file'
+      attach_file 'answer_attachments_attributes_0_file', "#{Rails.root}/spec/spec_helper.rb"
+      click_on 'Submit'
+    end
+
+    within '.answers' do
+      expect(page).to have_link 'spec_helper.rb'
+    end
+
+  end
 end

@@ -31,6 +31,11 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'slim-rails'
 gem 'devise'
 
+gem 'carrierwave'
+git_source(:github){ |repo_name| "https://github.com/#{repo_name}.git" }
+
+gem 'remotipart', github: 'jbox-web/remotipart', tag: '1.6.0'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -39,7 +44,6 @@ group :development, :test do
   gem 'rexml'
   gem 'factory_bot_rails'
   gem 'rails-controller-testing'
-
 end
 
 group :development do
@@ -51,20 +55,22 @@ group :development do
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  # gem 'rack-mini-profiler', '~> 2.0'
 end
 
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 3.26'
-  gem 'capybara-webkit', github: 'thoughtbot/capybara-webkit', branch: 'master'
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
+
+  gem 'capybara-webkit', github: 'thoughtbot/capybara-webkit', branch: 'master'
   gem 'shoulda-matchers'
   gem 'launchy'
   gem 'database_cleaner'
   gem 'webrick'
-
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

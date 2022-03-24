@@ -1,13 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
+  let(:question) { create(:question, user_id: user.id) }
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
+    let(:questions) { create_list(:question, 3).sort_by(&:created_at).reverse }
 
     before { get :index }
 
+    it 'assign questions array to @questions' do
+      expect(assigns(:questions)).to eq questions
+    end
 
     it 'render index view' do
       expect(response).to render_template :index
@@ -16,9 +20,15 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #show' do
     before { get :show, params: { id: question } }
+    let(:answers) { create_list(:answer, 3, question: question) }
+    sign_in_user
 
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
+    end
+
+    it 'assigns the answers to @answers' do
+      expect(assigns(:answers)).to eq answers
     end
 
     it 'render show view' do
