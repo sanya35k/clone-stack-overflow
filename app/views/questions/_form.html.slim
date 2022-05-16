@@ -1,0 +1,16 @@
+= form_for @question do |f|
+  div.form-group
+    = f.label :title
+    br
+    = f.text_field :title
+  div.form-group.mt-3
+    = f.label :body
+    br
+    = f.text_area :body
+  div.form-group.mt-3
+  div.files
+    = f.fields_for(:attachments, @question.attachments.build) do |a|
+      div.add-file-form
+        = a.label :file, class: 'file-label'
+        = a.file_field :file, class: 'file-new'
+  = f.submit 'Ask!'
