@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     resources :answers do
       member do
         post :set_best
+        patch :upvote
+        patch :downvote
       end
     end
   end
