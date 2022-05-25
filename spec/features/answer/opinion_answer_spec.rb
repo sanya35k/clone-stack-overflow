@@ -15,7 +15,9 @@ feature 'Set opinion for the answer', '
 
     visit question_path(question)
 
+    #all("a.vote-button").first.click
     # first(".vote-button").click
+
     # expect(page).to have_content('1')
     # all(".vote-button").last.click
     # expect(page).to have_content('-1')

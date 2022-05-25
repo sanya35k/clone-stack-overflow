@@ -10,4 +10,5 @@ class User < ApplicationRecord
   has_many :questions
   has_many :answers
   has_many :user_opinions, dependent: :delete_all
+  has_many :comments
 end

@@ -41,6 +41,16 @@ class QuestionsController < ApplicationController
     Attachment.find(params[:attachment_id]).destroy
   end
 
+  def publish_question
+    return if @question.errors.any?
+
+    json = @question.attributes.merge('current_user' => (user_signed_in? ? current_user.to_json : '0'),\
+                                      'short_body' => @question.short_body,\
+                                      'question_path' => question_path(@question),\
+                                      'user' => @question.user)
+    ActionCable.server.broadcast 'question_channel', json
+  end
+
   private
 
   def questions_params
