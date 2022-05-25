@@ -1,6 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
+require "action_cable/engine"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -18,5 +19,16 @@ module CloneStackOverflow
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.generators do |g|
+      g.test_framework :rspec,
+                       fixtures: true,
+                       view_spec: false,
+                       helper_specs: false,
+                       routing_specs: false,
+                       request_specs: false,
+                       controller_specs: true
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
+    end
   end
 end

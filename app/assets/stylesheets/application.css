@@ -12,4 +12,13 @@
  *
  *= require_tree .
  *= require_self
+ *= require font-awesome
  */
+
+*{
+    box-sizing: border-box;
+}
+
+.answer{
+    padding: 15px;
+}
