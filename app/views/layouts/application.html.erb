@@ -5,12 +5,31 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= action_cable_meta_tag %>
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid d-flex flex-row-reverse">
+        <div class="user_control float-right">
+          <% if user_signed_in? %>
+            <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
+          <% else %>
+            <%= link_to 'Sign in', new_user_session_path %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
   </head>
 
   <body>
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
     <%= yield %>
+  <div style="height: 400px;"></div>
+  <%= link_to 'Back to questions', questions_url %>
+  <p>(с) 2022 Konstantynov Alexander</p>
   </body>
 </html>
