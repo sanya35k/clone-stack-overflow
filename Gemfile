@@ -38,6 +38,8 @@ gem 'remotipart', github: 'jbox-web/remotipart', tag: '1.6.0'
 
 gem "font-awesome-rails"
 
+gem 'responders'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

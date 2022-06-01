@@ -320,6 +320,7 @@ DEPENDENCIES
   rails (~> 6.1.4, >= 6.1.4.4)
   rails-controller-testing
   remotipart!
+  responders
   rexml
   rspec-rails
   sass-rails (>= 6)
